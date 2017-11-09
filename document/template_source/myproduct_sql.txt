@@ -1,0 +1,8 @@
+drop table myproduct purge;
+CREATE TABLE myproduct(
+id number(10) primary key,
+name varchar2(30),
+maker varchar2(30),
+price number(10));
+
+CREATE sequence myproduct_seq nocache;

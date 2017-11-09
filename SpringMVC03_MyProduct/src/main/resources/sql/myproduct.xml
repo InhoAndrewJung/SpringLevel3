@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="myProductMapper">
+	<!--  
+		상품을 등록하는 쿼리을 작성
+		sequence가 있는 insert문일때 반드시 추가해야하는 엘러먼트
+		selectKey 것을 사용해야 한다.
+	-->
+	<insert id="insertMyProduct" parameterType="product">
+		<selectKey keyProperty="id" resultType="int" order="BEFORE">
+			SELECT myproduct_seq.nextVal FROM dual
+		</selectKey>	
+		INSERT INTO
+		myproduct VALUES(
+			#{id},
+			#{name},
+			#{maker},
+			#{price})	
+	</insert>
+	
+	<!-- select2개 작성
+	     하나는 상품명이 일부 포함된 쿼리문작성 LIKE %
+	     다른 하나는 제조사를 정확히 입력한후 검색하는 쿼리문
+	 -->
+	 <select id="findByProductName" parameterType="string" resultType="product">
+	 	SELECT
+	    id, name, maker, price
+	 	FROM myproduct
+	 	WHERE name LIKE '%' || #{value} || '%'
+	 </select>
+	
+	 <select id="findByProductMaker" parameterType="string" resultType="product">
+	 	SELECT
+	    id, name, maker, price
+	 	FROM myproduct
+	 	WHERE maker = #{maker}
+	 </select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

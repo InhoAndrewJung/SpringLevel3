@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+<context:property-placeholder location="classpath:config/jdbc.properties"/>
+<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+	<property name="driverClassName" value="${JDBC.Driver}"/>
+	<property name="url" value="${JDBC.ConnectionURL}"/>
+	<property name="username" value="${JDBC.Username}"/>
+	<property name="password" value="${JDBC.Password}"/>
+</bean>
+
+<!-- classpath 생략 못함 -->
+<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+	<property name="configLocation" value="classpath:config/SqlMapConfig.xml"/>
+	<property name="dataSource" ref="dataSource"/>
+</bean>
+<!-- 생성자로 주입밥는다. -->
+<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+	<constructor-arg ref="sqlSessionFactory"/>
+</bean>
+
+<bean id="myProductDAOImpl" class="com.kosta.spring.model.impl.MyProductDAOImpl">
+	<property name="sqlSession" ref="sqlSession"/>
+</bean>
+
+<bean id="myProductServiceImpl" class="com.kosta.spring.model.impl.MyProductServiceImpl">
+	<property name="myProductDAO" ref="myProductDAOImpl"/>
+</bean>
+
+<!-- Controller부분 -->
+
+<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	<property name="prefix" value="/WEB-INF/views/"/>
+	<property name="suffix" value=".jsp"/>
+</bean>
+
+<bean id="methodNameResolver" class="org.springframework.web.servlet.mvc.multiaction.ParameterMethodNameResolver">
+	<property name="paramName" value="command"/>
+</bean>
+
+<!-- MyProductController 빈 등록 -->
+<bean name="/myProduct.do" class="com.kosta.spring.controller.MyProductController">
+	<property name="methodNameResolver" ref="methodNameResolver"/>
+	<property name="myProductService" ref="myProductServiceImpl"/>
+</bean>
+</beans>
