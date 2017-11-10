@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd">
+
+<!-- <context:property-placeholder location="config/jdbc.properties"/>  -->
+
+<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+	<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+	<property name="url" value="jdbc:oracle:thin:@127.0.0.1:1521:xe"/>
+	<property name="username" value="hr"/>
+	<property name="password" value="hr"/>
+</bean>
+
+<!--  classpath 생략 못함-->
+<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+	<property name="configLocation" value="classpath:config/SqlMapConfig.xml"/>
+	<property name="dataSource" ref="dataSource"/>
+</bean>
+
+<!-- 생성자로 주입받는다. -->
+<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+	<constructor-arg ref="sqlSessionFactory"/>
+</bean>
+
+<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	<property name="prefix" value="/"/><!-- webapp가 default --> 
+	<property name="suffix" value=""/>
+	<property name="order" value="1"/>
+</bean>
+
+<bean id="beanNameResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
+	<property name="order" value="0"/>
+</bean>
+
+<bean name="JsonView" class="org.springframework.web.servlet.view.json.MappingJacksonJsonView"><!-- 이 이름으로 요청이 들어오면 -->
+
+</bean>
+
+<context:component-scan base-package="*"></context:component-scan>
+
+</beans>
+
+
+
+
+
+
+
+

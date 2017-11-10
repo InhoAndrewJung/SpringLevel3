@@ -1,0 +1,68 @@
+﻿***** SpringMVC 로그인 게시판 ( writing 기능 ) *****
+
+***** step1 *****
+로그인 처리 
+로그인한 사용자는 글쓰기 허용 
+글쓴 이후에 개별 게시글 보기까지 
+
+1. db modeling : 필요 테이블 , 컬럼 , 테이블 관계 , 제약조건 
+		
+		member |---0<- springboard
+		
+		drop table member purge;
+		create table member(
+			id varchar2(50) primary key,
+			password varchar2(50) not null,
+			name varchar2(50) not null,
+			address varchar2(50));
+		
+		drop table springboard purge;
+		create sequence springboard_seq nocache;
+		create table springboard(
+			no number primary key,
+			title varchar2(100) not null,
+			content varchar2(1000) not null,
+			count number default 0,
+			w_date date not null,
+			id varchar2(50) not null,
+			constraint fk_id foreign key(id) references member(id)
+		);
+
+2. 적용기술 : Spring MVC + DI + ibatis 
+
+3. file list : < Model >
+		model.MemberVO
+		model.MemberDao
+		model.MemberService
+		
+		model.BoardVO(has a MemberVO)
+		model.BoardDao
+		model.BoardService
+		
+		< Controller >
+		control.MemberController
+		control.BoardController
+						 
+		< View >
+		member/login_result.jsp(alert 처리) 
+		board/write.jsp	,show_content.jsp 
+			
+		< MetaData > : 
+		  WEB-INF/
+		         web.xml 
+			 dispatcher-servlet.xml
+			 SqlMapConfig.xml
+		  src/config/	  
+			  member.xml(select id="login")	
+			  board.xml (insert id="write", select id="selectByNoForDate")		
+						  
+						   
+						   		
+
+				
+				
+				
+				
+				
+				
+				

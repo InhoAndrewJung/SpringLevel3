@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd">
+
+<!-- 
+컨트롤러가 수행한 후, 리턴되는 객체는 ModelAndView에 담겨진다.
+ModelAndView에 담겨진  객체의 정보는 결과View페이지로 연결되어 출력된다.
+이때 결과페이지의 물리적인 디렉토리 위치 정보를 담는 객체가 InternalResourceViewResolver이다
+setPrefix()에 의해서 값이 저장된다.
+::
+이것 외에도 다양한 경로를 표시해주기 위해서 BeanNameViewResolver가 쓰인다.
+우선순위만 부여하고 물리적인 다양한 디렉토리정보는 JSTLView가 담당한다.
+::
+하지만 BeanNameViewResolver의 실질적인 사용처는 여기에 있지 않다.
+->여러 다른 기술이 돌아가기 위한 Bean을 설정하기 위해서는 필수적이다.
+Like Json, FileUpload에서의 Download기술
+ -->
+
+<!-- 라이브러리 빈 등록 -->
+<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	<property name="prefix" value="WEB-INF/views/"/><!--/ -> webapp가 default  -->
+	<property name="suffix" value=".jsp"/>
+	<property name="order" value="1"/>
+</bean>
+
+<bean id="beanNameResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
+	<property name="order" value="0"/>
+</bean>
+
+<bean name="JsonView" class="org.springframework.web.servlet.view.json.MappingJacksonJsonView"><!-- 이 이름으로 요청이 들어오면 -->
+
+</bean>
+
+<context:component-scan base-package="controller"></context:component-scan>
+
+</beans>
+
+
+
+
+
+
+
+

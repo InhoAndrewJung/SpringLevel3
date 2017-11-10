@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+	var xhr;
+	function startRequest(){
+		xhr = new XMLHttpRequest(); //sts, tern 플러그인
+		xhr.onreadystatechange = callback;//0
+		xhr.open("get","searchById.do", true);//클라이언트와 서버 연결됨 ->1
+		xhr.send(null);//1 ...2와3은 볼 수 없다
+		
+	}
+	function callback(){
+		if(xhr.readyState == 4){
+			if(xhr.status==200){
+				var jsonData=JSON.parse(xhr.responseText);// jsonData가 어떻게 출력되어지는지 볼 필요가 있다
+				alert(jsonData.person.name+", "+jsonData.person.address);//[object Object]... 클라라,서초동
+			}
+		}
+	}
+</script>
+</head>
+<body>
+<h2>동기 비동기 통신 Test...</h2>
+<a href="synch.do">동기통신 gogo</a>
+<input type="button" value="비동기버튼" onclick="startRequest()">
+</body>
+</html>

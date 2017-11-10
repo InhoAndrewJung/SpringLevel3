@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="boardMapper">
+	<insert id="write" parameterType="boardVO">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE"><!-- 시퀀스 뽑을때 사용 -->
+		 	SELECT springboard_seq.nextVal FROM dual
+		</selectKey>
+		INSERT INTO springboard(no, title, content, w_date, id)
+		VALUES(#{no},#{title},#{content},sysdate,#{memberVO.id})
+	</insert>
+</mapper>	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
