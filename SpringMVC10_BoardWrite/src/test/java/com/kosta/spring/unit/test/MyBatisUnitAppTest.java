@@ -14,14 +14,28 @@ import com.kosta.spring.model.MemberVO;
 public class MyBatisUnitAppTest {
 
 	@Test
-	public void unitTest() throws Exception {
+	public void unitTest() throws Exception{
 		Reader r = Resources.getResourceAsReader("config/SqlMapConfig.xml");
-		SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(r);
-		SqlSession session = factory.openSession();
+		SqlSessionFactory factory=new SqlSessionFactoryBuilder().build(r);
+		SqlSession session=factory.openSession();
 		
+		//BoardVO vo = new BoardVO(0, "1", "메롱", 0,"0");
 		BoardVO vo = new BoardVO(0, "1", "메롱", 0, "0", new MemberVO("11", "11", "11", "11"));
 		session.insert("boardMapper.write", vo);
 		session.commit();
-		
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

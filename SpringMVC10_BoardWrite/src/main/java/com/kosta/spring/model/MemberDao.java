@@ -8,12 +8,24 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class MemberDao {
-	
 	@Autowired
 	private SqlSession sqlSession;
 	
 	public MemberVO login(MemberVO mvo)throws SQLException{
-		System.out.println("login....dao..."+mvo);
-		return sqlSession.selectOne("memberMapper.login", mvo);
+		return sqlSession.selectOne("memberMapper.login",mvo);
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -5,8 +5,9 @@ public class MemberVO {
 	private String password;
 	private String name;
 	private String address;
+	
 	public MemberVO() {
-		super();
+		
 	}
 	public MemberVO(String id, String password, String name, String address) {
 		super();
@@ -39,10 +40,9 @@ public class MemberVO {
 	public void setAddress(String address) {
 		this.address = address;
 	}
+	
 	@Override
 	public String toString() {
 		return "MemberVO [id=" + id + ", password=" + password + ", name=" + name + ", address=" + address + "]";
-	}
-	
-	
+	}	
 }

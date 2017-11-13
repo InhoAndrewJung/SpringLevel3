@@ -23,10 +23,10 @@
 		</environment>		
 	</environments>
 	
-	<mappers>
+	<!-- <mappers>
 		<mapper resource="sql/board.xml"/>
 		<mapper resource="sql/member.xml"/>
-	</mappers>
+	</mappers> -->
 </configuration>
 
 

@@ -3,12 +3,72 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="boardMapper">
 	<insert id="write" parameterType="boardVO">
-		<selectKey keyProperty="no" resultType="int" order="BEFORE"><!-- 시퀀스 뽑을때 사용 -->
-		 	SELECT springboard_seq.nextVal FROM dual
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			SELECT springboard_seq.nextVal FROM dual
 		</selectKey>
-		INSERT INTO springboard(no, title, content, w_date, id)
+		INSERT INTO springboard (no, title, content, w_date, id)
 		VALUES(#{no},#{title},#{content},sysdate,#{memberVO.id})
 	</insert>
+	
+	<select id="selectByNoForDate" resultType="string" parameterType="int">
+		SELECT w_date FROM springboard
+		WHERE no=#{value}
+	</select>
+	<!-- resultMap의 사용용도
+	1.컬럼명과 필드명이 다를때, 
+	2.select문이 서로 다를 떄-->
+	<resultMap type="boardVO" id="boardListRM">
+		<result property="no" column="no"/>
+		<result property="title" column="title"/>
+		<result property="count" column="count"/>
+		<result property="writeDate" column="w_date"/>
+		<result property="memberVO.name" column="name"/> <!-- 조인부분 -->
+ 	</resultMap>
+ 	
+ 	<select id="getBoardList" resultMap="boardListRM" parameterType="string">
+ 		select no, title, count, w_date, name, page from
+		(select no, title, count, w_date, ceil(rownum/5) page, name from 
+		(select no, title, count, to_char(w_date, 'YYYY.MM.DD') w_date, name
+		from springboard s, member m
+		where s.id = m.id
+		order by no desc))
+		where page = #{value}
+ 	</select>
+ 	
+ 	<!-- 더 많은 정보를 뿌려야되서 boardListRM로부터 나머지는 상속받았다 -->
+ 	<!-- 특정 no에 해당하는 상세글을 보는 resultMap -->
+ 	<resultMap type="boardVO" id="boardRM" extends="boardListRM">
+ 		<result property="content" column="content"/>
+ 		<result property="memberVO.id" column="id"/>
+ 	</resultMap>
+ 	
+ 	<select id="showContent" parameterType="string" resultMap="boardRM">
+ 		select no, title, count, w_date, content, m.id, m.name
+ 		from springboard s, member m
+ 		where s.id = m.id and no=#{value}
+ 	</select>
+ 	
+ 	<delete id="delete" parameterType="string">
+ 		delete from springboard where no=#{value}
+ 	</delete>
+ 	
+ 	<update id="updateCount" parameterType="string">
+ 		update springboard
+ 		set count=count+1
+ 		where no = #{value}
+ 	</update>
+ 	
+ 	<!-- 파라매터로 vo가 왔을때에는 getTitle에서 get빼고 쓰면된다 -->
+ 	<update id="updateBoard" parameterType="boardVO">
+ 		update springboard
+ 		set title=#{title}, content=#{content}
+ 		where no=#{no}
+ 	</update>
+ 	
+ 	<!-- 페이징 처리시 추가 -->
+ 	<select id="totalCount" resultType="int">
+ 		select count(-1) from springboard
+ 	</select>
 </mapper>	
 
 

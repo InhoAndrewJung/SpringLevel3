@@ -10,12 +10,12 @@ import com.kosta.spring.model.MemberVO;
 
 @Service
 public class MemberService {
-
+	
 	@Autowired
 	private MemberDao memberDao;
 	
-	public MemberVO login(MemberVO mvo) throws SQLException {
-		System.out.println("login....service..."+mvo);
+	public MemberVO login(MemberVO mvo) throws SQLException{
 		return memberDao.login(mvo);
 	}
+
 }

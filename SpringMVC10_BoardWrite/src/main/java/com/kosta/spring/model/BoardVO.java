@@ -1,19 +1,15 @@
 package com.kosta.spring.model;
 
 public class BoardVO {
-	//PASSWORD는 제외했다. 대신에 ID가 들어있다.
+	//PASSWORD는 제외했따. 대신에 ID가 들어있다.
 	private int no;
 	private String title;
 	private String content;
 	private int count;
-	private String writeDate;//w_date
+	private String writeDate; //w_date
 	
 	//
-	private MemberVO memberVO;
-
-	public BoardVO() {
-		super();
-	}
+	private MemberVO  memberVO;
 
 	public BoardVO(int no, String title, String content, int count, String writeDate, MemberVO memberVO) {
 		super();
@@ -23,6 +19,11 @@ public class BoardVO {
 		this.count = count;
 		this.writeDate = writeDate;
 		this.memberVO = memberVO;
+	}
+
+	public BoardVO() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 
 	public BoardVO(int no, String title, String content, int count, String writeDate) {
@@ -86,7 +87,19 @@ public class BoardVO {
 	public String toString() {
 		return "BoardVO [no=" + no + ", title=" + title + ", content=" + content + ", count=" + count + ", writeDate="
 				+ writeDate + ", memberVO=" + memberVO + "]";
-	}
-	
-	
+	}	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
