@@ -1,0 +1,15 @@
+db¼³°è
+create sequence springboard_upload_seq nocache;
+
+create table springboard_upload(
+			no number primary key,
+			title varchar2(100) not null,
+			content varchar2(1000) not null,
+			count number default 0,
+			w_date date not null,
+			id varchar2(50) not null,
+			orgfilename varchar2(500),
+			newfilename varchar2(500),
+			constraint fk_upload_id foreign key(id) references member(id)
+		);
+select * from 	springboard_upload order by no desc;

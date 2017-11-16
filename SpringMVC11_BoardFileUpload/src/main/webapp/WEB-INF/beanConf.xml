@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+	<context:property-placeholder location="classpath:config/jdbc.properties"/> 
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+	<property name="driverClassName" value="${JDBC.Driver}"/>
+	<property name="url" value="${JDBC.ConnectionURL}"/>
+	<property name="username" value="${JDBC.Username}"/>
+	<property name="password" value="${JDBC.Password}"/>
+	</bean>
+
+
+<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+	<property name="configLocation" value="classpath:config/SqlMapConfig.xml"/>
+	<property name="dataSource" ref="dataSource"/>
+	<property name="mapperLocations" value="classpath:sql/*.xml"/>
+</bean>
+
+<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+	<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"/>
+</bean>
+
+<bean id="viewResolver" 
+class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+<property name="prefix" value="/"/>
+<property name="suffix" value=".jsp"/>
+<property name="order" value="1"/>
+</bean>
+
+<!-- 업로드시 필요한 빈설정 -->
+<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	<property name="defaultEncoding"	 value="utf-8"/>
+	<property name="maxUploadSize" value="-1"/>
+</bean>
+
+<!-- 다운로드시 필요한 빈설정 ::BeanNameResolver :DownloadView, ajax등의 기술을 사용할때 필요함, ~~-->
+<bean id="beanNameResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
+	<property name="order" value="0"/>
+</bean>
+<bean name="downloadView" class="com.kosta.spring.util.DownloadView"/>
+<bean name="JsonView" class="org.springframework.web.servlet.view.json.MappingJacksonJsonView"/>
+<context:component-scan base-package="*"></context:component-scan>
+</beans>

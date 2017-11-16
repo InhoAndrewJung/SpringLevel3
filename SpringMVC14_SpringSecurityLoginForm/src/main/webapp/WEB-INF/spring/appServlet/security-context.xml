@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:sec="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd">
+
+<!-- InternalViewResolver에서 ../views까지 comtextpath로 잡아놨음 -->
+<sec:http auto-config="true" use-expressions="true">
+	<sec:intercept-url pattern="/user/login" access="hasRole('ROLE_USER')"/>
+	<sec:intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
+	<sec:intercept-url pattern="/member/**" access="isAuthenticated()"/>
+	<sec:intercept-url pattern="/" access="permitAll"/>
+	
+	<!-- 인증되지 않은경우, 인증을 하기위한 로그인 페이지로 연결... -->
+	<!-- 로그인 폼은 사용자가 직접 작성한 폼을 의미한다. -->
+	<!--  
+		 login-page : 로그인폼 페이지 주소를 지정
+		 login-processing-url : 로그인 페이지의 action에 연결될 주소
+		 username-parameter : form태크에 있는 id가 입력되는 폼의 이름을 지정
+		 password-parameter : form태크에 있는 password가 입력되는 폼의 이름을 지정
+	-->
+	<sec:form-login
+		login-page="/user/loginForm" 
+		login-processing-url="/j_spring_security_check"
+		username-parameter="username"
+		password-parameter="password"
+		authentication-failure-url="/user/loginForm?ng"
+	/>
+	
+	<sec:logout
+		logout-url="/j_spring_security_logout"
+		invalidate-session="true"
+		delete-cookies="JSESSIONID"
+		logout-success-url="/user/loginForm"
+	/>
+</sec:http>
+
+<sec:authentication-manager>
+	<sec:authentication-provider>
+		<sec:user-service>
+			<sec:user name="kosta" password="kosta77" authorities="ROLE_USER"/>
+			<sec:user name="admin" password="admin77" authorities="ROLE_ADMIN"/>
+		</sec:user-service>
+	</sec:authentication-provider>
+</sec:authentication-manager>
+
+
+
+</beans>

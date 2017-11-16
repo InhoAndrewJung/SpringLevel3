@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:sec="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd">
+
+<!-- intercept url 태그의 속성중에 pattern
+::
+1. 구체적인 URL 패턴을 먼저 설정하고 덜 구체적인 패턴을 나중에 지정해야한다.
+2. /admin/**는 admin 디렉토리 아래에 있는 모든 디렉토리, 모든 파일을 다 지정
+	이 패턴은 /**보다는 더 구체적이다. (순서중요!! 구체적인 것을 먼저 써야한다)
+	Delegat
+ -->
+<sec:http auto-config="true" use-expressions="true">
+	<sec:intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
+	<sec:intercept-url pattern="/manager/**" access="hasRole('ROLE_MANAGER')"/>
+	<sec:intercept-url pattern="/member/**" access="isAuthenticated()"/>
+	<sec:intercept-url pattern="/**" access="permitAll"/>
+	<sec:intercept-url pattern="/" access="permitAll"/>
+</sec:http>
+
+<!-- In memory 방식 -->
+<sec:authentication-manager>
+	<sec:authentication-provider>
+		<sec:user-service>
+			<sec:user name="manager"  password="1234" authorities="ROLE_MANAGER"/>
+			<sec:user name="admin"	password="1234" authorities="ROLE_MANAGER, ROLE_ADMIN"/>
+		</sec:user-service>
+	</sec:authentication-provider>
+</sec:authentication-manager>
+
+</beans>

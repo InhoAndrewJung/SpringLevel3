@@ -11,20 +11,21 @@
 		<result property="address" column="address" jdbcType="VARCHAR"/>
 	</resultMap>
 	
-	<!-- SQL구믄의 모듈화 -->
+
+	<!--  sql 구문의 모듈화-->
 	<sql id="select-member">
-		SELECT
-		id, password, name, address
+		SELECT 
+		id, password, name , address
 		FROM member
 	</sql>
 	<insert id="registerMember" parameterType="member">
-		INSERT INTO member
-		VALUES(#{id},#{password},#{name},#{address})
+		INSERT
+		INTO member
+		VALUES(#{id},#{password}, #{name},#{address})
 	</insert>
 	
 	<select id="idcheck" parameterType="string" resultType="string">
-		SELECT id
-		FROM member
+		SELECT id FROM member
 		WHERE id=#{value}
 	</select>
 
@@ -34,26 +35,24 @@
 	</select>
 	
 	<update id="updateMember" parameterType="member">
-		UPDATE member
-		SET password=#{password},
+		UPDATE member SET
+		password=#{password},
 		name=#{name},
 		address=#{address}
 		WHERE id=#{id}
 	</update>
 	
-	<select id="findByAddress" parameterType="member" resultMap="memberSelectMap">
+	<select id="findByAddress" parameterType="string" resultMap="memberSelectMap">
 		<include refid="select-member"/>
 		WHERE address=#{value}
 	</select>
 	
 	<select id="getAddressKind" resultType="string">
-		SELECT DISTINCT(address)
-		FROM member
-	
+		SELECT DISTINCT(address) FROM member
 	</select>
 	
 	<select id="getAllMember" resultMap="memberSelectMap">
-		<include refid="select-member" />
+		<include refid="select-member"/>
 	</select>	
 </mapper>	
 
